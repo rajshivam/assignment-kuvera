@@ -1,6 +1,32 @@
 <template>
   <div class="explore">
     <div class="columns box level mb-0">
+      <div class="column">
+        <filter-dropdown
+          :columnProperty="'fund_category'"
+          :columnName="'Category'"
+          :dropdownList="fundCategories"
+        ></filter-dropdown>
+        <p class="is-size-7 is-italic has-text-right">Category filter</p>
+      </div>
+      <div class="column ">
+        <filter-dropdown
+          :columnProperty="'fund_type'"
+          :columnName="'Type'"
+          :dropdownList="fundTypes"
+        ></filter-dropdown>
+        <p class="is-size-7 is-italic has-text-right">Type filter</p>
+      </div>
+      <div class="column">
+        <filter-dropdown
+          :columnProperty="'plan'"
+          :columnName="'Plan'"
+          :dropdownList="fundPlans"
+        ></filter-dropdown>
+        <p class="is-size-7 is-italic has-text-right">Plan filter</p>
+      </div>
+    </div>
+    <div class="columns box level mb-0">
       <div
         class="column is-3-widescreen is-2-desktop level is-mobile is-marginless"
       >
@@ -88,8 +114,9 @@
         </div>
       </div>
     </div>
+
     <div
-      v-for="fund in sortedFunds.slice(0, 100)"
+      v-for="fund in filteredFunds.slice(0, 100)"
       :key="fund.code"
       class="columns box"
     >
@@ -149,12 +176,17 @@
 
 <script>
 import { mapState } from "vuex";
+import FilterDropdown from "@/components/FilterDropdown";
 
 const _ = require("lodash");
 
 export default {
+  components: {
+    FilterDropdown
+  },
+
   computed: {
-    ...mapState(["funds"]),
+    ...mapState(["funds", "selectedFundProperty"]),
 
     sortedFunds() {
       if (this.sortingOrder == "increasing")
@@ -162,14 +194,45 @@ export default {
       else if (this.sortingOrder == "decreasing")
         return _.sortBy(this.funds, this.sortByColumn).reverse();
       else return this.funds;
+    },
+
+    filteredFunds() {
+      let filterCriteria = {};
+      if (this.selectedFundProperty.fund_category)
+        filterCriteria.fund_category = this.selectedFundProperty.fund_category;
+      if (this.selectedFundProperty.fund_type)
+        filterCriteria.fund_type = this.selectedFundProperty.fund_type;
+      if (this.selectedFundProperty.plan)
+        filterCriteria.plan = this.selectedFundProperty.plan;
+
+      return _.filter(this.sortedFunds, filterCriteria);
     }
   },
 
   data() {
     return {
       sortByColumn: null,
-      sortingOrder: null
+      sortingOrder: null,
+      fundCategories: [],
+      fundTypes: [],
+      fundPlans: []
     };
+  },
+
+  watch: {
+    funds() {
+      this.fundCategories = _.sortedUniq(
+        _.map(_.sortBy(this.funds, "fund_category"), "fund_category")
+      );
+
+      this.fundTypes = _.sortedUniq(
+        _.map(_.sortBy(this.funds, "fund_type"), "fund_type")
+      );
+
+      this.fundPlans = _.sortedUniq(
+        _.map(_.sortBy(this.funds, "plan"), "plan")
+      );
+    }
   },
 
   methods: {

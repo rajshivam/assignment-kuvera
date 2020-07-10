@@ -18,4 +18,8 @@ export default {
   padding: 0;
   box-sizing: border-box;
 }
+
+.is-clickable {
+  cursor: pointer;
+}
 </style>

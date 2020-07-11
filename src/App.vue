@@ -4,14 +4,6 @@
   </div>
 </template>
 
-<script>
-export default {
-  created() {
-    this.$store.dispatch("loadFunds");
-  }
-};
-</script>
-
 <style lang="scss">
 * {
   margin: 0;
@@ -25,6 +17,14 @@ export default {
 
 .is-darkblue {
   color: #092745;
+}
+
+.is-lightblue {
+  color: #01bfff;
+}
+
+.is-fullwidth {
+  width: 100%;
 }
 
 .is-red {

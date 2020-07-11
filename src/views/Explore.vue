@@ -86,7 +86,8 @@
     <div
       v-for="fund in filteredFunds.slice(0, 100)"
       :key="fund.code"
-      class="columns box mt-0 is-paddingless"
+      class="columns box mt-0 is-paddingless is-clickable"
+      @click="routeToDetail(fund.code)"
     >
       <table-cell
         :cellData="fund.name"
@@ -96,16 +97,19 @@
       ></table-cell>
       <table-cell
         :cellData="fund.fund_category"
+        :cellClass="'is-lightblue'"
         :columnName="'Category'"
         class="column is-3-widescreen is-2-desktop"
       ></table-cell>
       <table-cell
         :cellData="fund.fund_type"
+        :cellClass="'is-lightblue'"
         :columnName="'Type'"
         class="column is-2"
       ></table-cell>
       <table-cell
         :cellData="fund.plan"
+        :cellClass="'is-lightblue'"
         :columnName="'Plan'"
         class="column is-2"
       ></table-cell>
@@ -132,7 +136,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapActions } from "vuex";
 import FilterDropdown from "@/components/FilterDropdown";
 import SortableTitle from "@/components/SortableTitle";
 import TableCell from "@/components/TableCell";
@@ -196,6 +200,18 @@ export default {
       searchTerm: "",
       nameSearchTerm: ""
     };
+  },
+
+  created() {
+    this.loadFunds();
+  },
+
+  methods: {
+    ...mapActions(["loadFunds"]),
+
+    routeToDetail(code) {
+      this.$router.push({ name: "FundDetail", params: { fundCode: code } });
+    }
   }
 };
 </script>

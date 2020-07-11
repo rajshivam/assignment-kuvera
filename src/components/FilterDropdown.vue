@@ -113,8 +113,8 @@ export default {
         padding-right: 1rem;
         font-size: 0.75rem;
         &:hover {
-          background: #ebf6ff;
-          color: #01bfff;
+          background: $paleblue;
+          color: $lightblue;
         }
       }
     }

@@ -43,44 +43,22 @@
         </p>
       </div>
     </div>
-
     <div class="table-container pt-5">
       <table class="table is-fullwidth">
         <tbody>
-          <tr>
-            <td class="has-text-grey">Minimum lump</td>
+          <tr v-for="(data, i) in tableData" :key="i">
+            <td class="has-text-grey">{{ data.leftLabel }}</td>
             <td class="has-text-grey-dark has-text-weight-bold">
-              {{ detail.lump_min }}
+              {{ detail[data.leftValueName] }}
             </td>
-            <td class="has-text-grey">Minimum SIP</td>
+            <td class="has-text-grey">{{ data.rightLabel }}</td>
             <td class="has-text-grey-dark has-text-weight-bold">
-              {{ detail.sip_min }}
-            </td>
-          </tr>
-          <tr>
-            <td class="has-text-grey">Maximum lump</td>
-            <td class="has-text-grey-dark has-text-weight-bold">
-              {{ detail.lump_max }}
-            </td>
-            <td class="has-text-grey">Maximum SIP</td>
-            <td class="has-text-grey-dark has-text-weight-bold">
-              {{ detail.sip_max }}
-            </td>
-          </tr>
-          <tr>
-            <td class="has-text-grey">Lump multiplier</td>
-            <td class="has-text-grey-dark has-text-weight-bold">
-              {{ detail.lump_multiplier }}
-            </td>
-            <td class="has-text-grey">SIP multiplier</td>
-            <td class="has-text-grey-dark has-text-weight-bold">
-              {{ detail.sip_multiplier }}
+              {{ detail[data.rightValueName] }}
             </td>
           </tr>
         </tbody>
       </table>
     </div>
-
     <div class="tile is-ancestor is-marginless">
       <div class="tile is-parent">
         <div class="tile is-child box">
@@ -157,7 +135,6 @@
         </div>
       </div>
     </div>
-
     <div class="level mt-5">
       <div class="level-item subtitle is-clickable is-size-6" @click="goBack()">
         Back to explore page
@@ -170,7 +147,27 @@
 export default {
   data() {
     return {
-      detail: null
+      detail: null,
+      tableData: [
+        {
+          leftLabel: "Minimum lump",
+          leftValueName: "lump_min",
+          rightLabel: "Minimum SIP",
+          rightValueName: "sip_min"
+        },
+        {
+          leftLabel: "Maximum lump",
+          leftValueName: "lump_max",
+          rightLabel: "Maximum SIP",
+          rightValueName: "sip_max"
+        },
+        {
+          leftLabel: "Lump multiplier",
+          leftValueName: "lump_multiplier",
+          rightLabel: "SIP multiplier",
+          rightValueName: "sip_multiplier"
+        }
+      ]
     };
   },
   created() {
@@ -183,7 +180,6 @@ export default {
         this.$route.params.fundCode
       );
       if (result) this.detail = result[0];
-      console.log(this.detail);
     },
 
     goBack() {
@@ -196,14 +192,14 @@ export default {
 <style lang="scss">
 .fund-detail {
   padding: 3rem 4rem;
-  background: #ebf6ff;
+  background: $paleblue;
 
   .title {
-    color: #092745;
+    color: $darkblue;
   }
 
   .subtitle {
-    color: #01bfff;
+    color: $lightblue;
     text-decoration: underline;
   }
 
@@ -217,7 +213,7 @@ export default {
 
   .box {
     box-shadow: none;
-    border: 1px solid #dbdbdb;
+    border: 1px solid $lightgrey;
   }
 }
 </style>

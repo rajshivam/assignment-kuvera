@@ -1,0 +1,28 @@
+/*
+ * cursor helpers
+ */
+
+
+.is-clickable {
+    cursor: pointer;
+}
+
+.is-fullwidth {
+    width: 100%;
+}
+
+.is-darkblue {
+    color: $darkblue;
+}
+
+.is-lightblue {
+    color: $lightblue;
+}
+
+.is-red {
+    color: $red;
+}
+
+.is-green {
+color: $green;
+}

@@ -67,7 +67,7 @@
               Volatility
             </div>
             <div class="is-darkblue has-text-weight-bold level-right">
-              {{ detail.volatility }}
+              {{ detail.volatility | roundDecimals }}
             </div>
           </div>
           <div class="level">
@@ -75,7 +75,7 @@
               NAV on {{ detail.nav.date }}
             </div>
             <div class="is-darkblue has-text-weight-bold level-right">
-              {{ detail.nav.nav }}
+              {{ detail.nav.nav | roundDecimals }}
             </div>
           </div>
           <div class="level">
@@ -83,7 +83,7 @@
               NAV on {{ detail.last_nav.date }}
             </div>
             <div class="is-darkblue has-text-weight-bold level-right">
-              {{ detail.last_nav.nav }}
+              {{ detail.last_nav.nav | roundDecimals }}
             </div>
           </div>
         </div>
@@ -101,7 +101,7 @@
                 { 'is-red': detail.returns.year_1 < 0 }
               ]"
             >
-              {{ detail.returns.year_1 }}
+              {{ detail.returns.year_1 | roundDecimals }}
             </div>
           </div>
           <div class="level">
@@ -115,7 +115,7 @@
                 { 'is-red': detail.returns.year_3 < 0 }
               ]"
             >
-              {{ detail.returns.year_3 }}
+              {{ detail.returns.year_3 | roundDecimals }}
             </div>
           </div>
           <div class="level">
@@ -129,7 +129,7 @@
                 { 'is-red': detail.returns.year_5 < 0 }
               ]"
             >
-              {{ detail.returns.year_5 }}
+              {{ detail.returns.year_5 | roundDecimals }}
             </div>
           </div>
         </div>

@@ -68,7 +68,7 @@
         :class="cell.class"
       ></table-cell>
       <table-cell
-        :cellData="fund.returns && fund.returns.year_1"
+        :cellData="fund.returns && fund.returns.year_1 | roundDecimals"
         :cellClass="[
           { 'is-green': fund.returns.year_1 > 0 },
           { 'is-red': fund.returns.year_1 < 0 }
@@ -77,7 +77,7 @@
         class="column is-1-widescreen is-2-desktop has-text-centered-desktop"
       ></table-cell>
       <table-cell
-        :cellData="fund.returns && fund.returns.year_3"
+        :cellData="fund.returns && fund.returns.year_3 | roundDecimals"
         :cellClass="[
           { 'is-green': fund.returns.year_3 > 0 },
           { 'is-red': fund.returns.year_3 < 0 }

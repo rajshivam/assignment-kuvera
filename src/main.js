@@ -3,6 +3,7 @@ import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 import service from "./services/index";
+import "./filters/index";
 
 import "bulma/css/bulma.css";
 import { library } from "@fortawesome/fontawesome-svg-core";

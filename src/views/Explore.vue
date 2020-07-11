@@ -1,20 +1,6 @@
 <template>
   <div class="explore">
-    <div class="columns">
-      <div class="column">
-        <p class="title is-1">Explore Funds</p>
-      </div>
-      <div class="column">
-        <div class="control">
-          <input
-            v-model="searchTerm"
-            class="input"
-            type="text"
-            placeholder="Search in funds"
-          />
-        </div>
-      </div>
-    </div>
+    <h1 class="title is-3">Explore Funds</h1>
 
     <div class="columns box level mt-0 is-paddingless">
       <sortable-title
@@ -84,7 +70,7 @@
     </div>
 
     <div
-      v-for="fund in filteredFunds.slice(0, 100)"
+      v-for="fund in finalFunds.slice(0, 100)"
       :key="fund.code"
       class="columns box mt-0 is-paddingless is-clickable"
       @click="routeToDetail(fund.code)"
@@ -192,12 +178,22 @@ export default {
 
     fundPlans() {
       return _.sortedUniq(_.map(_.sortBy(this.funds, "plan"), "plan"));
+    },
+
+    finalFunds() {
+      if (this.nameSearchTerm) {
+        return _.filter(this.filteredFunds, fund =>
+          _.startsWith(
+            fund.name.toLowerCase(),
+            this.nameSearchTerm.toLowerCase()
+          )
+        );
+      }
+      return this.filteredFunds;
     }
   },
-
   data() {
     return {
-      searchTerm: "",
       nameSearchTerm: ""
     };
   },

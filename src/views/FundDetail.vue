@@ -196,6 +196,7 @@ export default {
 <style lang="scss">
 .fund-detail {
   padding: 3rem 4rem;
+  background: #ebf6ff;
 
   .title {
     color: #092745;
@@ -204,6 +205,14 @@ export default {
   .subtitle {
     color: #01bfff;
     text-decoration: underline;
+  }
+
+  .table-container {
+    padding: 1rem;
+  }
+
+  .table {
+    border-radius: 6px;
   }
 
   .box {

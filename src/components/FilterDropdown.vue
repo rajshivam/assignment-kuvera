@@ -1,5 +1,5 @@
 <template>
-  <div class="level is-mobile is-marginless">
+  <div class="filter-dropdown level is-mobile is-marginless">
     <div class="level-left">
       <div
         class="dropdown level-item"
@@ -88,3 +88,39 @@ export default {
   }
 };
 </script>
+
+<style lang="scss">
+.filter-dropdown {
+  .level-left {
+    flex-grow: 1;
+    max-width: 90%;
+    .level-item {
+      justify-content: start;
+      max-width: 100%;
+    }
+    .dropdown-trigger {
+      max-width: 100%;
+      .button {
+        max-width: 100%;
+        span {
+          max-width: 100%;
+          overflow: hidden;
+        }
+      }
+    }
+    .dropdown-content {
+      max-height: 50vh;
+      overflow-y: scroll;
+
+      .dropdown-item {
+        padding-right: 1rem;
+        font-size: 0.75rem;
+        &:hover {
+          background: #ebf6ff;
+          color: #01bfff;
+        }
+      }
+    }
+  }
+}
+</style>

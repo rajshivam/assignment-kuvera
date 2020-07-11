@@ -6,10 +6,20 @@ import service from "./services/index";
 
 import "bulma/css/bulma.css";
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faUserSecret } from "@fortawesome/free-solid-svg-icons";
+import {
+  faMinusCircle,
+  faTimesCircle,
+  faChevronCircleUp,
+  faChevronCircleDown,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(faUserSecret);
+library.add(
+  faMinusCircle,
+  faTimesCircle,
+  faChevronCircleUp,
+  faChevronCircleDown
+);
 
 Vue.component("font-awesome-icon", FontAwesomeIcon);
 

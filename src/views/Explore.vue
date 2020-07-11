@@ -17,111 +17,30 @@
     </div>
 
     <div class="columns box level mt-0 is-paddingless">
-      <div
-        class="column is-3-widescreen is-2-desktop level is-mobile is-marginless"
-      >
-        <div class="level-left">
-          <span class="title is-5 level-item">Name</span>
-        </div>
-        <div class="level-right is-clickable" @click="sortFundsBy('name')">
-          <font-awesome-icon
-            v-if="sortByColumn == 'name' && sortingOrder == 'decreasing'"
-            icon="chevron-circle-up"
-            :style="{ color: '#092745' }"
-          />
-          <font-awesome-icon
-            v-else-if="sortByColumn == 'name' && sortingOrder == 'increasing'"
-            icon="chevron-circle-down"
-            :style="{ color: '#092745' }"
-          />
-          <font-awesome-icon
-            v-else
-            icon="minus-circle"
-            :style="{ color: '#092745' }"
-          />
-        </div>
-      </div>
-      <div
-        class="column is-3-widescreen is-2-desktop level is-mobile is-marginless"
-      >
-        <div class="level-left">
-          <span class="title is-5 level-item">Category</span>
-        </div>
-        <div
-          class="level-right is-clickable"
-          @click="sortFundsBy('fund_category')"
-        >
-          <font-awesome-icon
-            v-if="
-              sortByColumn == 'fund_category' && sortingOrder == 'decreasing'
-            "
-            icon="chevron-circle-up"
-            :style="{ color: '#092745' }"
-          />
-          <font-awesome-icon
-            v-else-if="
-              sortByColumn == 'fund_category' && sortingOrder == 'increasing'
-            "
-            icon="chevron-circle-down"
-            :style="{ color: '#092745' }"
-          />
-          <font-awesome-icon
-            v-else
-            icon="minus-circle"
-            :style="{ color: '#092745' }"
-          />
-        </div>
-      </div>
-      <div class="column is-2 level is-mobile is-marginless">
-        <div class="level-left">
-          <span class="title is-5 level-item">Type</span>
-        </div>
-        <div class="level-right is-clickable" @click="sortFundsBy('fund_type')">
-          <font-awesome-icon
-            v-if="sortByColumn == 'fund_type' && sortingOrder == 'decreasing'"
-            icon="chevron-circle-up"
-            :style="{ color: '#092745' }"
-          />
-          <font-awesome-icon
-            v-else-if="
-              sortByColumn == 'fund_type' && sortingOrder == 'increasing'
-            "
-            icon="chevron-circle-down"
-            :style="{ color: '#092745' }"
-          />
-          <font-awesome-icon
-            v-else
-            icon="minus-circle"
-            :style="{ color: '#092745' }"
-          />
-        </div>
-      </div>
-      <div class="column is-2 level is-mobile is-marginless">
-        <div class="level-left">
-          <span class="title is-5 level-item">Plan</span>
-        </div>
-        <div class="level-right is-clickable" @click="sortFundsBy('plan')">
-          <font-awesome-icon
-            v-if="sortByColumn == 'plan' && sortingOrder == 'decreasing'"
-            icon="chevron-circle-up"
-            :style="{ color: '#092745' }"
-          />
-          <font-awesome-icon
-            v-else-if="sortByColumn == 'plan' && sortingOrder == 'increasing'"
-            icon="chevron-circle-down"
-            :style="{ color: '#092745' }"
-          />
-          <font-awesome-icon
-            v-else
-            icon="minus-circle"
-            :style="{ color: '#092745' }"
-          />
-        </div>
-      </div>
+      <sortable-title
+        :columnName="'Name'"
+        :columnProperty="'name'"
+        class="column is-3-widescreen is-2-desktop "
+      ></sortable-title>
+      <sortable-title
+        :columnName="'Category'"
+        :columnProperty="'funds_category'"
+        class="column is-3-widescreen is-2-desktop "
+      ></sortable-title>
+      <sortable-title
+        :columnName="'Type'"
+        :columnProperty="'funds_type'"
+        class="column is-2"
+      ></sortable-title>
+      <sortable-title
+        :columnName="'Plan'"
+        :columnProperty="'plan'"
+        class="column is-2"
+      ></sortable-title>
       <div
         class="column is-2-widescreen is-4-desktop is-hidden-mobile has-text-centered"
       >
-        <div class="title is-5">Returns</div>
+        <span class="title is-5">Returns</span>
       </div>
     </div>
 
@@ -133,30 +52,27 @@
           v-model="nameSearchTerm"
           class="input name-input"
           type="text"
-          placeholder="Search in funds"
+          placeholder="Search funds by name"
         />
       </div>
-      <div class="column is-3-widescreen is-2-desktop">
-        <filter-dropdown
-          :columnProperty="'fund_category'"
-          :columnName="'Category'"
-          :dropdownList="fundCategories"
-        ></filter-dropdown>
-      </div>
-      <div class="column is-2">
-        <filter-dropdown
-          :columnProperty="'fund_type'"
-          :columnName="'Type'"
-          :dropdownList="fundTypes"
-        ></filter-dropdown>
-      </div>
-      <div class="column is-2">
-        <filter-dropdown
-          :columnProperty="'plan'"
-          :columnName="'Plan'"
-          :dropdownList="fundPlans"
-        ></filter-dropdown>
-      </div>
+      <filter-dropdown
+        :columnProperty="'fund_category'"
+        :columnName="'Category'"
+        :dropdownList="fundCategories"
+        class="column is-3-widescreen is-2-desktop"
+      ></filter-dropdown>
+      <filter-dropdown
+        :columnProperty="'fund_type'"
+        :columnName="'Type'"
+        :dropdownList="fundTypes"
+        class="column is-2"
+      ></filter-dropdown>
+      <filter-dropdown
+        :columnProperty="'plan'"
+        :columnName="'Plan'"
+        :dropdownList="fundPlans"
+        class="column is-2"
+      ></filter-dropdown>
       <div
         class="column is-2-widescreen is-4-desktop is-hidden-mobile has-text-centered"
       >
@@ -245,16 +161,23 @@
 <script>
 import { mapState } from "vuex";
 import FilterDropdown from "@/components/FilterDropdown";
+import SortableTitle from "@/components/SortableTitle";
 
 const _ = require("lodash");
 
 export default {
   components: {
-    FilterDropdown
+    FilterDropdown,
+    SortableTitle
   },
 
   computed: {
-    ...mapState(["funds", "selectedFundProperty"]),
+    ...mapState([
+      "funds",
+      "selectedFundProperty",
+      "sortByColumn",
+      "sortingOrder"
+    ]),
 
     sortedFunds() {
       if (this.sortingOrder == "increasing")
@@ -279,8 +202,6 @@ export default {
 
   data() {
     return {
-      sortByColumn: null,
-      sortingOrder: null,
       fundCategories: [],
       fundTypes: [],
       fundPlans: [],
@@ -302,20 +223,6 @@ export default {
       this.fundPlans = _.sortedUniq(
         _.map(_.sortBy(this.funds, "plan"), "plan")
       );
-    }
-  },
-
-  methods: {
-    sortFundsBy(columnName) {
-      if (this.sortByColumn == columnName) {
-        if (!this.sortingOrder) this.sortingOrder = "increasing";
-        else if (this.sortingOrder == "increasing")
-          this.sortingOrder = "decreasing";
-        else this.sortingOrder = null;
-      } else {
-        this.sortByColumn = columnName;
-        this.sortingOrder = "increasing";
-      }
     }
   }
 };

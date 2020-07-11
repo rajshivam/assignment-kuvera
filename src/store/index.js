@@ -12,6 +12,8 @@ export default new Vuex.Store({
       fund_type: null,
       plan: null,
     },
+    sortByColumn: null,
+    sortingOrder: null,
   },
   mutations: {
     setFunds(state, payload) {
@@ -23,7 +25,17 @@ export default new Vuex.Store({
     },
     setSelectedFundProperty(state, payload) {
       state.selectedFundProperty[payload.columnProperty] = payload.element;
-      console.log(state.selectedFundProperty);
+    },
+    setFundsSort(state, payload) {
+      if (state.sortByColumn == payload) {
+        if (!state.sortingOrder) state.sortingOrder = "increasing";
+        else if (state.sortingOrder == "increasing")
+          state.sortingOrder = "decreasing";
+        else state.sortingOrder = null;
+      } else {
+        state.sortByColumn = payload;
+        state.sortingOrder = "increasing";
+      }
     },
   },
   actions: {
@@ -44,6 +56,9 @@ export default new Vuex.Store({
     },
     changeSelectedProperty({ commit }, value) {
       commit("setSelectedFundProperty", value);
+    },
+    changeSort({ commit }, value) {
+      commit("setFundsSort", value);
     },
   },
 });

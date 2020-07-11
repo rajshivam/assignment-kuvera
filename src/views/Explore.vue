@@ -6,21 +6,33 @@
       <sortable-title
         :columnName="'Name'"
         :columnProperty="'name'"
+        :sortByColumn="sortByColumn"
+        :sortingOrder="sortingOrder"
+        @changeSort="changeSort"
         class="column is-3-widescreen is-2-desktop "
       ></sortable-title>
       <sortable-title
         :columnName="'Category'"
         :columnProperty="'fund_category'"
+        :sortByColumn="sortByColumn"
+        :sortingOrder="sortingOrder"
+        @changeSort="changeSort"
         class="column is-3-widescreen is-2-desktop "
       ></sortable-title>
       <sortable-title
         :columnName="'Type'"
         :columnProperty="'fund_type'"
+        :sortByColumn="sortByColumn"
+        :sortingOrder="sortingOrder"
+        @changeSort="changeSort"
         class="column is-2"
       ></sortable-title>
       <sortable-title
         :columnName="'Plan'"
         :columnProperty="'plan'"
+        :sortByColumn="sortByColumn"
+        :sortingOrder="sortingOrder"
+        @changeSort="changeSort"
         class="column is-2"
       ></sortable-title>
       <div
@@ -45,18 +57,30 @@
         :columnProperty="'fund_category'"
         :columnName="'Category'"
         :dropdownList="fundCategories"
+        :activeDropdown="activeDropdown"
+        :filterValue="filter"
+        @changeDropdown="toggleActiveDropdown"
+        @changeFilter="changeFilter"
         class="column is-3-widescreen is-2-desktop"
       ></filter-dropdown>
       <filter-dropdown
         :columnProperty="'fund_type'"
         :columnName="'Type'"
         :dropdownList="fundTypes"
+        :activeDropdown="activeDropdown"
+        :filterValue="filter"
+        @changeDropdown="toggleActiveDropdown"
+        @changeFilter="changeFilter"
         class="column is-2"
       ></filter-dropdown>
       <filter-dropdown
         :columnProperty="'plan'"
         :columnName="'Plan'"
         :dropdownList="fundPlans"
+        :activeDropdown="activeDropdown"
+        :filterValue="filter"
+        @changeDropdown="toggleActiveDropdown"
+        @changeFilter="changeFilter"
         class="column is-2"
       ></filter-dropdown>
       <div
@@ -122,7 +146,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions, mapGetters } from "vuex";
 import FilterDropdown from "@/components/FilterDropdown";
 import SortableTitle from "@/components/SortableTitle";
 import TableCell from "@/components/TableCell";
@@ -137,12 +161,8 @@ export default {
   },
 
   computed: {
-    ...mapState([
-      "funds",
-      "selectedFundProperty",
-      "sortByColumn",
-      "sortingOrder"
-    ]),
+    ...mapState(["funds"]),
+    ...mapGetters(["fundCategories", "fundTypes", "fundPlans"]),
 
     sortedFunds() {
       if (this.sortingOrder == "ascending")
@@ -154,30 +174,13 @@ export default {
 
     filteredFunds() {
       let filterCriteria = {};
-      if (this.selectedFundProperty.fund_category)
-        filterCriteria.fund_category = this.selectedFundProperty.fund_category;
-      if (this.selectedFundProperty.fund_type)
-        filterCriteria.fund_type = this.selectedFundProperty.fund_type;
-      if (this.selectedFundProperty.plan)
-        filterCriteria.plan = this.selectedFundProperty.plan;
+      if (this.filter.fund_category)
+        filterCriteria.fund_category = this.filter.fund_category;
+      if (this.filter.fund_type)
+        filterCriteria.fund_type = this.filter.fund_type;
+      if (this.filter.plan) filterCriteria.plan = this.filter.plan;
 
       return _.filter(this.sortedFunds, filterCriteria);
-    },
-
-    fundCategories() {
-      return _.sortedUniq(
-        _.map(_.sortBy(this.funds, "fund_category"), "fund_category")
-      );
-    },
-
-    fundTypes() {
-      return _.sortedUniq(
-        _.map(_.sortBy(this.funds, "fund_type"), "fund_type")
-      );
-    },
-
-    fundPlans() {
-      return _.sortedUniq(_.map(_.sortBy(this.funds, "plan"), "plan"));
     },
 
     finalFunds() {
@@ -194,7 +197,15 @@ export default {
   },
   data() {
     return {
-      nameSearchTerm: ""
+      nameSearchTerm: "",
+      activeDropdown: null,
+      filter: {
+        fund_category: null,
+        fund_type: null,
+        plan: null
+      },
+      sortByColumn: null,
+      sortingOrder: null
     };
   },
 
@@ -207,6 +218,27 @@ export default {
 
     routeToDetail(code) {
       this.$router.push({ name: "FundDetail", params: { fundCode: code } });
+    },
+
+    toggleActiveDropdown(value) {
+      if (this.activeDropdown == value) this.activeDropdown = null;
+      else this.activeDropdown = value;
+    },
+
+    changeFilter(columnName, value) {
+      this.filter[columnName] = value;
+    },
+
+    changeSort(value) {
+      if (this.sortByColumn == value) {
+        if (!this.sortingOrder) this.sortingOrder = "ascending";
+        else if (this.sortingOrder == "ascending")
+          this.sortingOrder = "descending";
+        else this.sortingOrder = null;
+      } else {
+        this.sortByColumn = value;
+        this.sortingOrder = "ascending";
+      }
     }
   }
 };

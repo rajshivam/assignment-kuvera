@@ -7,7 +7,7 @@
       >
         <div
           class="dropdown-trigger"
-          @click="toggleActiveDropdown(columnProperty)"
+          @click="changeActiveDropdown(columnProperty)"
         >
           <button
             class="button"
@@ -15,8 +15,8 @@
             aria-controls="dropdown-menu"
           >
             <span>{{
-              selectedFundProperty[columnProperty]
-                ? selectedFundProperty[columnProperty]
+              filterValue[columnProperty]
+                ? filterValue[columnProperty]
                 : `Filter by ${columnName}`
             }}</span>
             <span class="icon is-small">
@@ -31,8 +31,8 @@
               :key="i"
               class="dropdown-item"
               @click="
-                changeSelectedProperty({ columnProperty, element });
-                toggleActiveDropdown(columnProperty);
+                changeFilterCriteria(columnProperty, element);
+                changeActiveDropdown(null);
               "
             >
               {{ element }}
@@ -44,8 +44,8 @@
     <div
       class="level-right is-clickable"
       @click="
-        changeSelectedProperty({ columnProperty, nullValue });
-        closeAllDropdowns();
+        changeFilterCriteria(columnProperty, null);
+        changeActiveDropdown(null);
       "
     >
       <font-awesome-icon icon="times-circle" :style="{ color: '#EE3B5B' }" />
@@ -54,8 +54,6 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
-
 export default {
   props: {
     columnProperty: {
@@ -66,11 +64,9 @@ export default {
     },
     dropdownList: {
       required: true
-    }
-  },
-
-  computed: {
-    ...mapState(["activeDropdown", "selectedFundProperty"])
+    },
+    activeDropdown: {},
+    filterValue: {}
   },
 
   data() {
@@ -80,11 +76,12 @@ export default {
   },
 
   methods: {
-    ...mapActions([
-      "toggleActiveDropdown",
-      "closeAllDropdowns",
-      "changeSelectedProperty"
-    ])
+    changeActiveDropdown(value) {
+      this.$emit("changeDropdown", value);
+    },
+    changeFilterCriteria(columnName, value) {
+      this.$emit("changeFilter", columnName, value);
+    }
   }
 };
 </script>

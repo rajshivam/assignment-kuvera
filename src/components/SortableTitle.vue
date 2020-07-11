@@ -5,14 +5,12 @@
     </div>
     <div class="level-right is-clickable" @click="changeSort(columnProperty)">
       <font-awesome-icon
-        v-if="sortByColumn == columnProperty && sortingOrder == 'descending'"
+        v-if="sortDescending"
         icon="chevron-circle-up"
         :style="{ color: '#092745' }"
       />
       <font-awesome-icon
-        v-else-if="
-          sortByColumn == columnProperty && sortingOrder == 'ascending'
-        "
+        v-else-if="sortAscending"
         icon="chevron-circle-down"
         :style="{ color: '#092745' }"
       />
@@ -26,8 +24,6 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
-
 export default {
   props: {
     columnName: {
@@ -35,15 +31,30 @@ export default {
     },
     columnProperty: {
       required: true
-    }
+    },
+    sortByColumn: {},
+    sortingOrder: {}
   },
 
   computed: {
-    ...mapState(["sortByColumn", "sortingOrder"])
+    sortAscending() {
+      return (
+        this.sortByColumn == this.columnProperty &&
+        this.sortingOrder == "ascending"
+      );
+    },
+    sortDescending() {
+      return (
+        this.sortByColumn == this.columnProperty &&
+        this.sortingOrder == "descending"
+      );
+    }
   },
 
   methods: {
-    ...mapActions(["changeSort"])
+    changeSort(columnProperty) {
+      this.$emit("changeSort", columnProperty);
+    }
   }
 };
 </script>

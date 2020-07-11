@@ -88,72 +88,45 @@
       :key="fund.code"
       class="columns box mt-0 is-paddingless"
     >
-      <div class="column is-3-widescreen is-2-desktop">
-        <p class="is-size-7 has-text-weight-bold is-darkblue">
-          {{ fund.name }}
-        </p>
-        <p class="is-size-7 is-italic is-hidden-desktop">Name</p>
-      </div>
-      <div class="column is-3-widescreen is-2-desktop">
-        <p v-if="fund.fund_category" class="is-size-7">
-          {{ fund.fund_category }}
-        </p>
-        <p v-else class="is-size-7 is-italic has-text-weight-light">
-          *no data*
-        </p>
-        <p class="is-size-7 is-italic is-hidden-desktop">Category</p>
-      </div>
-
-      <div class="column is-2">
-        <p v-if="fund.fund_type" class="is-size-7">{{ fund.fund_type }}</p>
-        <p v-else class="is-size-7 is-italic has-text-weight-light">
-          *no data*
-        </p>
-        <p class="is-size-7 is-italic is-hidden-desktop">Type</p>
-      </div>
-      <div class="column is-2">
-        <p v-if="fund.plan" class="is-size-7">{{ fund.plan }}</p>
-        <p v-else class="is-size-7 is-italic has-text-weight-light">
-          *no data*
-        </p>
-        <p class=" is-size-7 is-italic is-hidden-desktop">Plan</p>
-      </div>
-      <div
+      <table-cell
+        :cellData="fund.name"
+        :cellClass="'has-text-weight-bold is-darkblue'"
+        :columnName="'Name'"
+        class="column is-3-widescreen is-2-desktop"
+      ></table-cell>
+      <table-cell
+        :cellData="fund.fund_category"
+        :columnName="'Category'"
+        class="column is-3-widescreen is-2-desktop"
+      ></table-cell>
+      <table-cell
+        :cellData="fund.fund_type"
+        :columnName="'Type'"
+        class="column is-2"
+      ></table-cell>
+      <table-cell
+        :cellData="fund.plan"
+        :columnName="'Plan'"
+        class="column is-2"
+      ></table-cell>
+      <table-cell
+        :cellData="fund.returns && fund.returns.year_1"
+        :cellClass="[
+          { 'is-green': fund.returns.year_1 > 0 },
+          { 'is-red': fund.returns.year_1 < 0 }
+        ]"
+        :columnName="'1 year return'"
         class="column is-1-widescreen is-2-desktop has-text-centered-desktop"
-      >
-        <p
-          v-if="fund.returns && fund.returns.year_1"
-          class="is-size-7"
-          :class="[
-            { 'is-green': fund.returns.year_1 > 0 },
-            { 'is-red': fund.returns.year_1 < 0 }
-          ]"
-        >
-          {{ fund.returns.year_1 }}
-        </p>
-        <p v-else class="is-size-7 is-italic has-text-weight-light">
-          *no data*
-        </p>
-        <p class="is-size-7 is-italic is-hidden-desktop">1 year return</p>
-      </div>
-      <div
+      ></table-cell>
+      <table-cell
+        :cellData="fund.returns && fund.returns.year_3"
+        :cellClass="[
+          { 'is-green': fund.returns.year_3 > 0 },
+          { 'is-red': fund.returns.year_3 < 0 }
+        ]"
+        :columnName="'3 year return'"
         class="column is-1-widescreen is-2-desktop has-text-centered-desktop"
-      >
-        <p
-          v-if="fund.returns && fund.returns.year_3"
-          class="is-size-7"
-          :class="[
-            { 'is-green': fund.returns.year_1 > 0 },
-            { 'is-red': fund.returns.year_1 < 0 }
-          ]"
-        >
-          {{ fund.returns.year_3 }}
-        </p>
-        <p v-else class="is-size-7 is-italic has-text-weight-light">
-          *no data*
-        </p>
-        <p class="is-size-7 is-italic is-hidden-desktop">3 year return</p>
-      </div>
+      ></table-cell>
     </div>
   </div>
 </template>
@@ -162,13 +135,15 @@
 import { mapState } from "vuex";
 import FilterDropdown from "@/components/FilterDropdown";
 import SortableTitle from "@/components/SortableTitle";
+import TableCell from "@/components/TableCell";
 
 const _ = require("lodash");
 
 export default {
   components: {
     FilterDropdown,
-    SortableTitle
+    SortableTitle,
+    TableCell
   },
 
   computed: {
@@ -180,7 +155,6 @@ export default {
     ]),
 
     sortedFunds() {
-      console.log("sortedFunds", this.sortingOrder, this.sortByColumn);
       if (this.sortingOrder == "ascending")
         return _.sortBy(this.funds, this.sortByColumn);
       else if (this.sortingOrder == "descending")
@@ -198,33 +172,30 @@ export default {
         filterCriteria.plan = this.selectedFundProperty.plan;
 
       return _.filter(this.sortedFunds, filterCriteria);
+    },
+
+    fundCategories() {
+      return _.sortedUniq(
+        _.map(_.sortBy(this.funds, "fund_category"), "fund_category")
+      );
+    },
+
+    fundTypes() {
+      return _.sortedUniq(
+        _.map(_.sortBy(this.funds, "fund_type"), "fund_type")
+      );
+    },
+
+    fundPlans() {
+      return _.sortedUniq(_.map(_.sortBy(this.funds, "plan"), "plan"));
     }
   },
 
   data() {
     return {
-      fundCategories: [],
-      fundTypes: [],
-      fundPlans: [],
       searchTerm: "",
       nameSearchTerm: ""
     };
-  },
-
-  watch: {
-    funds() {
-      this.fundCategories = _.sortedUniq(
-        _.map(_.sortBy(this.funds, "fund_category"), "fund_category")
-      );
-
-      this.fundTypes = _.sortedUniq(
-        _.map(_.sortBy(this.funds, "fund_type"), "fund_type")
-      );
-
-      this.fundPlans = _.sortedUniq(
-        _.map(_.sortBy(this.funds, "plan"), "plan")
-      );
-    }
   }
 };
 </script>

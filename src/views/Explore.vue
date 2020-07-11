@@ -1,32 +1,22 @@
 <template>
   <div class="explore">
-    <div class="columns box level mb-0">
+    <div class="columns">
       <div class="column">
-        <filter-dropdown
-          :columnProperty="'fund_category'"
-          :columnName="'Category'"
-          :dropdownList="fundCategories"
-        ></filter-dropdown>
-        <p class="is-size-7 is-italic has-text-right">Category filter</p>
-      </div>
-      <div class="column ">
-        <filter-dropdown
-          :columnProperty="'fund_type'"
-          :columnName="'Type'"
-          :dropdownList="fundTypes"
-        ></filter-dropdown>
-        <p class="is-size-7 is-italic has-text-right">Type filter</p>
+        <p class="title is-1">Explore Funds</p>
       </div>
       <div class="column">
-        <filter-dropdown
-          :columnProperty="'plan'"
-          :columnName="'Plan'"
-          :dropdownList="fundPlans"
-        ></filter-dropdown>
-        <p class="is-size-7 is-italic has-text-right">Plan filter</p>
+        <div class="control">
+          <input
+            v-model="searchTerm"
+            class="input"
+            type="text"
+            placeholder="Search in funds"
+          />
+        </div>
       </div>
     </div>
-    <div class="columns box level mb-0">
+
+    <div class="columns box level mt-0 is-paddingless">
       <div
         class="column is-3-widescreen is-2-desktop level is-mobile is-marginless"
       >
@@ -37,12 +27,18 @@
           <font-awesome-icon
             v-if="sortByColumn == 'name' && sortingOrder == 'decreasing'"
             icon="chevron-circle-up"
+            :style="{ color: '#092745' }"
           />
           <font-awesome-icon
             v-else-if="sortByColumn == 'name' && sortingOrder == 'increasing'"
             icon="chevron-circle-down"
+            :style="{ color: '#092745' }"
           />
-          <font-awesome-icon v-else icon="minus-circle" />
+          <font-awesome-icon
+            v-else
+            icon="minus-circle"
+            :style="{ color: '#092745' }"
+          />
         </div>
       </div>
       <div
@@ -60,14 +56,20 @@
               sortByColumn == 'fund_category' && sortingOrder == 'decreasing'
             "
             icon="chevron-circle-up"
+            :style="{ color: '#092745' }"
           />
           <font-awesome-icon
             v-else-if="
               sortByColumn == 'fund_category' && sortingOrder == 'increasing'
             "
             icon="chevron-circle-down"
+            :style="{ color: '#092745' }"
           />
-          <font-awesome-icon v-else icon="minus-circle" />
+          <font-awesome-icon
+            v-else
+            icon="minus-circle"
+            :style="{ color: '#092745' }"
+          />
         </div>
       </div>
       <div class="column is-2 level is-mobile is-marginless">
@@ -78,14 +80,20 @@
           <font-awesome-icon
             v-if="sortByColumn == 'fund_type' && sortingOrder == 'decreasing'"
             icon="chevron-circle-up"
+            :style="{ color: '#092745' }"
           />
           <font-awesome-icon
             v-else-if="
               sortByColumn == 'fund_type' && sortingOrder == 'increasing'
             "
             icon="chevron-circle-down"
+            :style="{ color: '#092745' }"
           />
-          <font-awesome-icon v-else icon="minus-circle" />
+          <font-awesome-icon
+            v-else
+            icon="minus-circle"
+            :style="{ color: '#092745' }"
+          />
         </div>
       </div>
       <div class="column is-2 level is-mobile is-marginless">
@@ -96,18 +104,62 @@
           <font-awesome-icon
             v-if="sortByColumn == 'plan' && sortingOrder == 'decreasing'"
             icon="chevron-circle-up"
+            :style="{ color: '#092745' }"
           />
           <font-awesome-icon
             v-else-if="sortByColumn == 'plan' && sortingOrder == 'increasing'"
             icon="chevron-circle-down"
+            :style="{ color: '#092745' }"
           />
-          <font-awesome-icon v-else icon="minus-circle" />
+          <font-awesome-icon
+            v-else
+            icon="minus-circle"
+            :style="{ color: '#092745' }"
+          />
         </div>
       </div>
       <div
         class="column is-2-widescreen is-4-desktop is-hidden-mobile has-text-centered"
       >
-        <div class="title is-5 mb-3">Returns</div>
+        <div class="title is-5">Returns</div>
+      </div>
+    </div>
+
+    <div class="columns box level mt-0 is-paddingless">
+      <div
+        class="column is-3-widescreen is-2-desktop level is-mobile is-marginless"
+      >
+        <input
+          v-model="nameSearchTerm"
+          class="input name-input"
+          type="text"
+          placeholder="Search in funds"
+        />
+      </div>
+      <div class="column is-3-widescreen is-2-desktop">
+        <filter-dropdown
+          :columnProperty="'fund_category'"
+          :columnName="'Category'"
+          :dropdownList="fundCategories"
+        ></filter-dropdown>
+      </div>
+      <div class="column is-2">
+        <filter-dropdown
+          :columnProperty="'fund_type'"
+          :columnName="'Type'"
+          :dropdownList="fundTypes"
+        ></filter-dropdown>
+      </div>
+      <div class="column is-2">
+        <filter-dropdown
+          :columnProperty="'plan'"
+          :columnName="'Plan'"
+          :dropdownList="fundPlans"
+        ></filter-dropdown>
+      </div>
+      <div
+        class="column is-2-widescreen is-4-desktop is-hidden-mobile has-text-centered"
+      >
         <div class="columns">
           <span class="column title is-6 is-marginless">1 year</span>
           <span class="column title is-6 is-marginless">3 years</span>
@@ -118,57 +170,73 @@
     <div
       v-for="fund in filteredFunds.slice(0, 100)"
       :key="fund.code"
-      class="columns box"
+      class="columns box mt-0 is-paddingless"
     >
       <div class="column is-3-widescreen is-2-desktop">
-        <p class="title is-6">{{ fund.name }}</p>
-        <p class="subtitle is-7 is-italic is-hidden-desktop">Name</p>
+        <p class="is-size-7 has-text-weight-bold is-darkblue">
+          {{ fund.name }}
+        </p>
+        <p class="is-size-7 is-italic is-hidden-desktop">Name</p>
       </div>
       <div class="column is-3-widescreen is-2-desktop">
-        <p v-if="fund.fund_category" class="title is-6">
+        <p v-if="fund.fund_category" class="is-size-7">
           {{ fund.fund_category }}
         </p>
-        <p v-else class="title is-6 is-italic has-text-weight-light">
+        <p v-else class="is-size-7 is-italic has-text-weight-light">
           *no data*
         </p>
-        <p class="subtitle is-7 is-italic is-hidden-desktop">Category</p>
+        <p class="is-size-7 is-italic is-hidden-desktop">Category</p>
       </div>
 
       <div class="column is-2">
-        <p v-if="fund.fund_type" class="title is-6">{{ fund.fund_type }}</p>
-        <p v-else class="title is-6 is-italic has-text-weight-light">
+        <p v-if="fund.fund_type" class="is-size-7">{{ fund.fund_type }}</p>
+        <p v-else class="is-size-7 is-italic has-text-weight-light">
           *no data*
         </p>
-        <p class="subtitle is-7 is-italic is-hidden-desktop">Type</p>
+        <p class="is-size-7 is-italic is-hidden-desktop">Type</p>
       </div>
       <div class="column is-2">
-        <p v-if="fund.plan" class="title is-6">{{ fund.plan }}</p>
-        <p v-else class="title is-6 is-italic has-text-weight-light">
+        <p v-if="fund.plan" class="is-size-7">{{ fund.plan }}</p>
+        <p v-else class="is-size-7 is-italic has-text-weight-light">
           *no data*
         </p>
-        <p class="subtitle is-7 is-italic is-hidden-desktop">Plan</p>
+        <p class=" is-size-7 is-italic is-hidden-desktop">Plan</p>
       </div>
       <div
         class="column is-1-widescreen is-2-desktop has-text-centered-desktop"
       >
-        <p v-if="fund.returns && fund.returns.year_1" class="title is-6">
+        <p
+          v-if="fund.returns && fund.returns.year_1"
+          class="is-size-7"
+          :class="[
+            { 'is-green': fund.returns.year_1 > 0 },
+            { 'is-red': fund.returns.year_1 < 0 }
+          ]"
+        >
           {{ fund.returns.year_1 }}
         </p>
-        <p v-else class="title is-6 is-italic has-text-weight-light">
+        <p v-else class="is-size-7 is-italic has-text-weight-light">
           *no data*
         </p>
-        <p class="subtitle is-7 is-italic is-hidden-desktop">1 year return</p>
+        <p class="is-size-7 is-italic is-hidden-desktop">1 year return</p>
       </div>
       <div
         class="column is-1-widescreen is-2-desktop has-text-centered-desktop"
       >
-        <p v-if="fund.returns && fund.returns.year_3" class="title is-6">
+        <p
+          v-if="fund.returns && fund.returns.year_3"
+          class="is-size-7"
+          :class="[
+            { 'is-green': fund.returns.year_1 > 0 },
+            { 'is-red': fund.returns.year_1 < 0 }
+          ]"
+        >
           {{ fund.returns.year_3 }}
         </p>
-        <p v-else class="title is-6 is-italic has-text-weight-light">
+        <p v-else class="is-size-7 is-italic has-text-weight-light">
           *no data*
         </p>
-        <p class="subtitle is-7 is-italic is-hidden-desktop">3 year return</p>
+        <p class="is-size-7 is-italic is-hidden-desktop">3 year return</p>
       </div>
     </div>
   </div>
@@ -215,7 +283,9 @@ export default {
       sortingOrder: null,
       fundCategories: [],
       fundTypes: [],
-      fundPlans: []
+      fundPlans: [],
+      searchTerm: "",
+      nameSearchTerm: ""
     };
   },
 
@@ -253,10 +323,25 @@ export default {
 
 <style lang="scss">
 .explore {
+  padding: 2rem;
+  background: #ebf6ff;
   .fund-row {
     width: 100%;
     display: flex;
     justify-content: space-evenly;
+  }
+  .title {
+    color: #092745;
+  }
+  .button {
+    padding: 0.25rem 0.5rem;
+    color: #092745;
+    font-size: 0.75rem;
+  }
+  .name-input {
+    padding: 0.25rem 0.5rem;
+    color: #092745;
+    font-size: 0.75rem;
   }
 }
 </style>

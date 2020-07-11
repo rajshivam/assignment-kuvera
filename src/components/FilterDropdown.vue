@@ -48,7 +48,7 @@
         closeAllDropdowns();
       "
     >
-      <font-awesome-icon icon="times-circle" />
+      <font-awesome-icon icon="times-circle" :style="{ color: '#EE3B5B' }" />
     </div>
   </div>
 </template>

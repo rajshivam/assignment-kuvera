@@ -22,4 +22,16 @@ export default {
 .is-clickable {
   cursor: pointer;
 }
+
+.is-darkblue {
+  color: #092745;
+}
+
+.is-red {
+  color: #ee3b5b;
+}
+
+.is-green {
+  color: #01a068;
+}
 </style>

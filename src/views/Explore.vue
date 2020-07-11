@@ -24,12 +24,12 @@
       ></sortable-title>
       <sortable-title
         :columnName="'Category'"
-        :columnProperty="'funds_category'"
+        :columnProperty="'fund_category'"
         class="column is-3-widescreen is-2-desktop "
       ></sortable-title>
       <sortable-title
         :columnName="'Type'"
-        :columnProperty="'funds_type'"
+        :columnProperty="'fund_type'"
         class="column is-2"
       ></sortable-title>
       <sortable-title
@@ -180,9 +180,10 @@ export default {
     ]),
 
     sortedFunds() {
-      if (this.sortingOrder == "increasing")
+      console.log("sortedFunds", this.sortingOrder, this.sortByColumn);
+      if (this.sortingOrder == "ascending")
         return _.sortBy(this.funds, this.sortByColumn);
-      else if (this.sortingOrder == "decreasing")
+      else if (this.sortingOrder == "descending")
         return _.sortBy(this.funds, this.sortByColumn).reverse();
       else return this.funds;
     },

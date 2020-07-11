@@ -28,13 +28,13 @@ export default new Vuex.Store({
     },
     setFundsSort(state, payload) {
       if (state.sortByColumn == payload) {
-        if (!state.sortingOrder) state.sortingOrder = "increasing";
-        else if (state.sortingOrder == "increasing")
-          state.sortingOrder = "decreasing";
+        if (!state.sortingOrder) state.sortingOrder = "ascending";
+        else if (state.sortingOrder == "ascending")
+          state.sortingOrder = "descending";
         else state.sortingOrder = null;
       } else {
         state.sortByColumn = payload;
-        state.sortingOrder = "increasing";
+        state.sortingOrder = "ascending";
       }
     },
   },

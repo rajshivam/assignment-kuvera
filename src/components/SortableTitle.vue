@@ -5,13 +5,13 @@
     </div>
     <div class="level-right is-clickable" @click="changeSort(columnProperty)">
       <font-awesome-icon
-        v-if="sortByColumn == columnProperty && sortingOrder == 'decreasing'"
+        v-if="sortByColumn == columnProperty && sortingOrder == 'descending'"
         icon="chevron-circle-up"
         :style="{ color: '#092745' }"
       />
       <font-awesome-icon
         v-else-if="
-          sortByColumn == columnProperty && sortingOrder == 'increasing'
+          sortByColumn == columnProperty && sortingOrder == 'ascending'
         "
         icon="chevron-circle-down"
         :style="{ color: '#092745' }"
